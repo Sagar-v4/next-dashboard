@@ -1,3 +1,51 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "next/core-web-vitals"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "project": "tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "unused-imports"],
+  "rules": {
+    "require-await": "warn",
+    "no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "no-return-await": "warn",
+    "@typescript-eslint/await-thenable": "error",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all",
+        "ignoreReadBeforeAssign": false
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/ban-ts-comment": "off"
+  },
+  "ignorePatterns": [
+    ".eslintrc.js",
+    "db_migrations",
+    "coverage",
+    "jest.config.js",
+    "jest-mongodb-config.js"
+  ]
 }
