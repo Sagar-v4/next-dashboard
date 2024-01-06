@@ -10,13 +10,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      title: "Home",
-      href: "/",
-      external: true,
+      title: "Login",
+      href: "/login",
     },
     {
-      title: "Home",
-      href: "/",
+      title: "Register",
+      href: "/register",
     },
   ],
   links: {
