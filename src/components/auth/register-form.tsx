@@ -13,6 +13,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { sendMail } from "@/lib/mail";
 import { RegisterSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { register } from "@/actions/register";
@@ -35,14 +36,30 @@ export const RegisterForm = () => {
     },
   });
 
+  const sendRegistrationMail = async (
+    values: z.infer<typeof RegisterSchema>
+  ): Promise<boolean> => {
+    return await sendMail({
+      to: values.email,
+      name: `${values.firstName} ${values.lastName}`,
+      subject: "New Registration Verification",
+      body: `Hello ${values.firstName} ${values.lastName}`,
+    });
+  };
+
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSucces("");
 
     startTransition(async () => {
-      register(values).then((data) => {
+      register(values).then(async (data) => {
         setError(data.error);
-        setSucces(data.success);
+        if (data.success) {
+          const isMailSent: boolean = await sendRegistrationMail(values);
+          if (isMailSent) {
+            setSucces(data.success);
+          }
+        }
       });
     });
   };
