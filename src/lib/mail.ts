@@ -5,6 +5,10 @@ import { config } from "@/config/config";
 // import * as handlebars from "handlebars";
 // import { welcomeTemplate } from "./templates/welcome";
 
+/**
+ * YT Link: https://www.youtube.com/watch?v=81lt0qcXtHE
+ */
+
 interface Mail {
   to: string;
   name: string;
@@ -12,12 +16,7 @@ interface Mail {
   body: string;
 }
 
-export const sendMail = async ({
-  to,
-  name,
-  subject,
-  body,
-}: Mail): Promise<boolean> => {
+export const sendMail = async ({ to, name, subject, body }: Mail) => {
   try {
     const { SMTP_EMAIL, SMTP_PASSWORD } = config;
 
@@ -39,7 +38,7 @@ export const sendMail = async ({
       html: body,
     });
     console.log("🚀 ~ file: mail.ts:37 ~ sendMail ~ sendResult:", sendResult);
-    return sendResult.response.includes("2.0.0 OK");
+    return sendResult.response.includes("2.0.0 OK") as boolean;
   } catch (error) {
     console.log("🚀 ~ file: mail.ts:39 ~ sendMail ~ error:", error);
     return false;
