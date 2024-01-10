@@ -1,7 +1,7 @@
 "use server";
 
 import nodemailer from "nodemailer";
-import { config } from "@/config/config";
+import { config } from "@/config/env";
 // import * as handlebars from "handlebars";
 // import { welcomeTemplate } from "./templates/welcome";
 
@@ -16,7 +16,7 @@ interface Mail {
   body: string;
 }
 
-export const sendMail = async ({ to, name, subject, body }: Mail) => {
+export const sendSMTPMail = async ({ to, name, subject, body }: Mail) => {
   try {
     const { SMTP_EMAIL, SMTP_PASSWORD } = config;
 

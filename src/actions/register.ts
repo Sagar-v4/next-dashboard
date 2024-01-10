@@ -2,14 +2,14 @@
 
 import * as z from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { sendMail } from "@/lib/mail";
+import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
 import { RegisterSchema } from "@/schemas";
 
 const sendRegistrationMail = async (
   values: z.infer<typeof RegisterSchema>,
   createPasswordLink: string
 ) => {
-  return await sendMail({
+  return await sendSMTPMail({
     to: values.email,
     name: `${values.firstName} ${values.lastName}`,
     subject: "New Registration Verification",
@@ -28,7 +28,7 @@ export const register = async (
   }
 
   const uuid = uuidv4();
-  const createPasswordLink = `${origin}/create-password/${uuid}`;
+  const createPasswordLink = `${origin}/create/${uuid}`;
   const isMailSent = await sendRegistrationMail(values, createPasswordLink);
 
   if (!isMailSent) {
