@@ -13,10 +13,11 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { authLinks } from "@/config/site";
 import { RegisterSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
-import { register } from "@/actions/register";
 import { Button } from "@/components/ui/button";
+import { register } from "@/actions/auth/register";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
@@ -56,7 +57,7 @@ export const RegisterForm = () => {
       <CardWrapper
         headerLabel="Create an account"
         backButtonLabel="Already have an account?"
-        backButtonHref="/login"
+        backButtonHref={authLinks.login.href}
         showSocial
       >
         <Form {...form}>

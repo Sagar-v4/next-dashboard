@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,40 +13,39 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { ResetSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CreatePasswordSchema } from "@/schemas";
 import { FormError } from "@/components/form-error";
+import { reset } from "@/actions/auth/password/reset";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
-import { createPassword } from "@/actions/auth/password/create";
 
-export const CreatePasswordForm = () => {
-  const router = useRouter();
+export const ResetPasswordForm = () => {
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof CreatePasswordSchema>>({
-    resolver: zodResolver(CreatePasswordSchema),
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      email: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof CreatePasswordSchema>) => {
+  const onSubmit = (values: z.infer<typeof ResetSchema>) => {
     setError("");
     setSucces("");
 
     startTransition(async () => {
-      createPassword(values).then((data) => {
+      const origin =
+        typeof window !== undefined && window.location.origin
+          ? window.location.origin
+          : "";
+      await reset(values, origin).then((data) => {
         setError(data.error);
-        if (data.success) {
-          setSucces(data.success);
-          router.push("/login");
-        }
+        setSucces(data.success);
       });
     });
   };
@@ -55,7 +53,7 @@ export const CreatePasswordForm = () => {
   return (
     <>
       <CardWrapper
-        headerLabel="Create your new account password"
+        headerLabel="Forgot your password"
         backButtonLabel="Back to Login"
         backButtonHref={authLinks.login.href}
         // showSocial
@@ -65,35 +63,16 @@ export const CreatePasswordForm = () => {
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="password"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        type="password"
+                        type="email"
                         disabled={isPending}
-                        placeholder="******"
-                      />
-                    </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="password"
-                        disabled={isPending}
-                        placeholder="******"
+                        placeholder="john.doe@example.com"
                       />
                     </FormControl>
                     {/* <FormDescription>Description</FormDescription> */}
@@ -105,7 +84,7 @@ export const CreatePasswordForm = () => {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button type="submit" disabled={isPending} className="w-full">
-              Create new password
+              Send reset email
             </Button>
           </form>
         </Form>

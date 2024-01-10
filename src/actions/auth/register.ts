@@ -2,8 +2,9 @@
 
 import * as z from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
+import { authLinks } from "@/config/site";
 import { RegisterSchema } from "@/schemas";
+import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
 
 const sendRegistrationMail = async (
   values: z.infer<typeof RegisterSchema>,
@@ -28,7 +29,7 @@ export const register = async (
   }
 
   const uuid = uuidv4();
-  const createPasswordLink = `${origin}/create/${uuid}`;
+  const createPasswordLink = `${origin}${authLinks.create.href}/${uuid}`;
   const isMailSent = await sendRegistrationMail(values, createPasswordLink);
 
   if (!isMailSent) {

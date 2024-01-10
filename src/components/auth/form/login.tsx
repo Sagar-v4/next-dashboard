@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,8 +14,9 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { login } from "@/actions/login";
 import { LoginSchema } from "@/schemas";
+import { authLinks } from "@/config/site";
+import { login } from "@/actions/auth/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
@@ -51,7 +53,7 @@ export const LoginForm = () => {
       <CardWrapper
         headerLabel="Welcome back"
         backButtonLabel="Don't have an account?"
-        backButtonHref="/register"
+        backButtonHref={authLinks.register.href}
         showSocial
       >
         <Form {...form}>
@@ -91,6 +93,14 @@ export const LoginForm = () => {
                       />
                     </FormControl>
                     {/* <FormDescription>Description</FormDescription> */}
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="link"
+                      className="p-0 font-normal"
+                    >
+                      <Link href={authLinks.reset.href}>Forgot password?</Link>
+                    </Button>
                     <FormMessage />
                   </FormItem>
                 )}
