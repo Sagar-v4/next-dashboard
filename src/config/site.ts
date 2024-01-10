@@ -24,3 +24,22 @@ export const siteConfig = {
     docs: "https://ui.shadcn.com",
   },
 };
+
+export const authLinks = {
+  login: {
+    title: "Login",
+    href: "/login",
+  },
+  register: {
+    title: "Register",
+    href: "/register",
+  },
+  reset: {
+    title: "Reset",
+    href: "/reset",
+  },
+  create: {
+    title: "Create",
+    href: "/create",
+  },
+};
