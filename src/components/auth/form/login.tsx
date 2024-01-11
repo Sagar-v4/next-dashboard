@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { LoginSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
+import { useRouter } from "next/navigation";
 import { login } from "@/actions/auth/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,9 @@ import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
 export const LoginForm = () => {
+  const router = useRouter();
+  const twoFactorAuthentication = true;
+
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -43,7 +47,12 @@ export const LoginForm = () => {
     startTransition(async () => {
       login(values).then((data) => {
         setError(data.error);
-        setSucces(data.success);
+        if (data.success) {
+          setSucces(data.success);
+          if (twoFactorAuthentication) {
+            router.push(data.TwoFactorAuthLink);
+          }
+        }
       });
     });
   };

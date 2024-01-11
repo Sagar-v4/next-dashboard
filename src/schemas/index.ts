@@ -40,3 +40,12 @@ export const CreatePasswordSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
+
+export const TwoFactorAuthSchema = z
+  .object({
+    code: z.string().min(6, { message: "It should be 6 numbers" }),
+  })
+  .refine((data) => !/[^\d]/.test(data.code.trim()), {
+    message: "It should be numbers only",
+    path: ["code"],
+  });

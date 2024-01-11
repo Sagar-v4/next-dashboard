@@ -42,4 +42,8 @@ export const authLinks = {
     title: "Create",
     href: "/create",
   },
+  twoFactorAuth: {
+    title: "Two Factor Authentication",
+    href: "/2fa",
+  },
 };
