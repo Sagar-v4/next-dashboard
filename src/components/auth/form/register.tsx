@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { authLinks } from "@/config/site";
 import { RegisterSchema } from "@/schemas";
@@ -45,7 +44,7 @@ export const RegisterForm = () => {
         typeof window !== undefined && window.location.origin
           ? window.location.origin
           : "";
-      await register(values, origin).then((data) => {
+      await register(origin, values).then((data) => {
         setError(data.error);
         setSucces(data.success);
       });
@@ -77,7 +76,6 @@ export const RegisterForm = () => {
                         placeholder="john"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -96,7 +94,6 @@ export const RegisterForm = () => {
                         placeholder="doe"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -115,7 +112,6 @@ export const RegisterForm = () => {
                         placeholder="john.doe@example.com"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
