@@ -17,12 +17,17 @@ import { authLinks } from "@/config/site";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { TwoFactorAuthSchema } from "@/schemas";
+import { twoFactorAuth } from "@/actions/auth/2fa";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
-import { twoFactorAuth } from "@/actions/auth/twoFactorAuth";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const TwoFactorAuthForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const uuid: string | null = searchParams.get("id");
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -39,9 +44,12 @@ export const TwoFactorAuthForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      twoFactorAuth(values).then((data) => {
+      twoFactorAuth(uuid, values).then((data) => {
         setError(data.error);
-        setSucces(data.success);
+        if (data.success) {
+          setSucces(data.success);
+          router.push("/");
+        }
       });
     });
   };
