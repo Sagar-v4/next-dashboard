@@ -12,7 +12,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { LoginSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
@@ -26,7 +25,6 @@ import { CardWrapper } from "@/components/auth/card-wrapper";
 
 export const LoginForm = () => {
   const router = useRouter();
-  const twoFactorAuthentication = true;
 
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
@@ -45,12 +43,14 @@ export const LoginForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      login(values).then((data) => {
+      login(values).then((data: any) => {
         setError(data.error);
         if (data.success) {
           setSucces(data.success);
-          if (twoFactorAuthentication) {
+          if (data.TwoFactorAuthLink) {
             router.push(data.TwoFactorAuthLink);
+          } else {
+            router.push("/");
           }
         }
       });
@@ -82,7 +82,6 @@ export const LoginForm = () => {
                         placeholder="john.doe@example.com"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -101,7 +100,6 @@ export const LoginForm = () => {
                         placeholder="******"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <Button
                       asChild
                       size="sm"
