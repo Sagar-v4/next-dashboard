@@ -2,9 +2,9 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -12,7 +12,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { authLinks } from "@/config/site";
 import { Input } from "@/components/ui/input";
@@ -25,6 +24,9 @@ import { createPassword } from "@/actions/auth/password/create";
 
 export const CreatePasswordForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const uuid: string | null = searchParams.get("id");
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -42,11 +44,11 @@ export const CreatePasswordForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      createPassword(values).then((data) => {
+      createPassword(uuid, values).then((data) => {
         setError(data.error);
         if (data.success) {
           setSucces(data.success);
-          router.push("/login");
+          router.push(authLinks.login.href);
         }
       });
     });
@@ -58,7 +60,6 @@ export const CreatePasswordForm = () => {
         headerLabel="Create your new account password"
         backButtonLabel="Back to Login"
         backButtonHref={authLinks.login.href}
-        // showSocial
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -77,7 +78,6 @@ export const CreatePasswordForm = () => {
                         placeholder="******"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -96,7 +96,6 @@ export const CreatePasswordForm = () => {
                         placeholder="******"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
