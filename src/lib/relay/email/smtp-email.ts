@@ -1,7 +1,7 @@
 "use server";
 
 import nodemailer from "nodemailer";
-import { config } from "@/config/env";
+import { smtpMail } from "@/config/env";
 // import * as handlebars from "handlebars";
 // import { welcomeTemplate } from "./templates/welcome";
 
@@ -18,7 +18,7 @@ interface Mail {
 
 export const sendSMTPMail = async ({ to, name, subject, body }: Mail) => {
   try {
-    const { SMTP_EMAIL, SMTP_PASSWORD } = config;
+    const { SMTP_EMAIL, SMTP_PASSWORD } = smtpMail;
 
     const transport = nodemailer.createTransport({
       service: "gmail",
