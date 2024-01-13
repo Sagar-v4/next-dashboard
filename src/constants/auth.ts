@@ -7,3 +7,8 @@ export enum temporaryTypes {
   REGISTRATION = "REGISTRATION",
   "2FA" = "TWO FACTOR AUTHENTICATION",
 }
+
+export enum userRoles {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}

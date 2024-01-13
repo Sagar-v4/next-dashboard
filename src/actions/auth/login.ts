@@ -2,10 +2,13 @@
 
 import * as z from "zod";
 import { v4 as uuidv4 } from "uuid";
+import { AuthError } from "next-auth";
+import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
 import Temporary from "@/lib/model/temporary";
 import { temporaryTypes } from "@/constants/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import User, { IUserBase } from "@/lib/model/user";
 import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
 
@@ -29,7 +32,7 @@ const getUser = async (values: z.infer<typeof LoginSchema>) => {
   try {
     const user: IUserBase | null = await User.findOne({ email: values.email });
     if (user === null) {
-      return { error: "Email is not registered!" };
+      return null; // { error: "Email is not registered!" };
     }
     const isPasswordMatching: boolean = user.compareHash(values.password);
     console.log("🚀 ~ getUser ~ isPasswordMatching:", isPasswordMatching);
@@ -59,12 +62,19 @@ const saveTemporaryDetails = async (uuid: string, values: any) => {
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   try {
-    const twoFactorAuthentication = true;
     const validatedFields = LoginSchema.safeParse(values);
 
     if (!validatedFields.success) {
       return { error: "Invalid fields!" };
     }
+
+    const { email, password } = validatedFields.data;
+
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
 
     const user: any = await getUser(values);
     console.log("🚀 ~ login ~ user:", user);
@@ -96,6 +106,15 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     };
   } catch (error) {
     console.log("🚀 ~ error:", error);
-    return { error: (error as Error).message };
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+
+    throw error;
   }
 };

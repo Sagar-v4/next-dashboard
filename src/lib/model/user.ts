@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { Document, model, models, Schema, Types } from "mongoose";
 import { IAccountBase } from "@/lib/model/account";
+import { userRoles } from "@/constants/auth";
 
 // import validator from "validator";
 
@@ -18,7 +19,13 @@ const userSchema = new Schema({
   isPhoneVerified: { type: Date },
   twoFactorAuthentication: { type: Date },
   password: { type: String },
-  accounts: [{ accountId: { type: Types.ObjectId, ref: "Account" } }],
+  roles: [
+    {
+      type: String,
+      enum: Object.values(userRoles),
+    },
+  ],
+  accounts: { type: String, ref: "Account" },
   createdAt: { type: Date, default: Date.now },
 
   /**
@@ -38,16 +45,17 @@ const userSchema = new Schema({
 });
 
 export interface IUserSchema extends Document {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   firstName: String;
   lastName: String;
   email: String;
   isEmailVerified?: Date;
-  phone?: string;
+  phone?: String;
   isPhoneVerified?: Date;
   twoFactorAuthentication?: Date;
   password?: String;
-  accounts: Array<IAccountBase>;
+  accounts: Array<Types.ObjectId>;
+  roles: Array<String>;
   createdAt: Date;
 
   /**
@@ -76,12 +84,19 @@ userSchema.methods.toPublicJSON = function () {
   return _.omit(this._doc, ["password", "__v"]);
 };
 
+userSchema.pre("save", async function (next) {
+  if (!this.roles.length) {
+    this.roles.push(userRoles.USER);
+  }
+  next();
+});
+
 export interface IUserBase extends IUserSchema {
   hashPassword(password: string): string;
   compareHash(password: string): boolean;
   toPublicJSON(): IUserSchema;
 }
 
-const User = models.User || model<IUserBase>("User", userSchema);
+const User = models?.User || model<IUserBase>("User", userSchema);
 
 export default User;

@@ -23,6 +23,6 @@ export interface ITemporaryBase extends ITemporarySchema {
 }
 
 const Temporary =
-  models.Temporary || model<ITemporaryBase>("Temporary", temporarySchema);
+  models?.Temporary || model<ITemporaryBase>("Temporary", temporarySchema);
 
 export default Temporary;

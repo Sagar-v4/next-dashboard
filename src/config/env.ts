@@ -9,4 +9,5 @@ export const smtpMail: keyValue = {
 
 export const db: keyValue = {
   MONGODB_URI: String(process.env.MONGODB_URI),
+  DATABASE_NAME: String(process.env.DATABASE_NAME),
 };

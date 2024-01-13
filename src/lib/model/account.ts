@@ -78,6 +78,7 @@ export interface IAccountBase extends IAccountSchema {
   // TODO: add functions in future versions
 }
 
-const Account = models.Account || model<IAccountBase>("Account", accountSchema);
+const Account =
+  models?.Account || model<IAccountBase>("Account", accountSchema);
 
 export default Account;
