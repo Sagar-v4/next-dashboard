@@ -1,24 +1,31 @@
 import mongoose from "mongoose";
 import { db } from "@/config/env";
+import { MongoClient } from "mongodb";
 
-declare module global {
+declare global {
+  namespace globalThis {
+    var _mongoClientPromise: Promise<MongoClient>;
+  }
   var mongoose: any;
 }
 
-const MONGODB_URI = db.MONGODB_URI;
+const MONGODB_URI: string = db.MONGODB_URI;
 if (!MONGODB_URI) {
   throw new Error("Mongo URI not found!");
 }
 
-let cached = global.mongoose;
+let gloablWithMongoose: any = (global as typeof globalThis) && {
+  mongoose,
+};
 
+let cached: any = gloablWithMongoose.mongoose;
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = gloablWithMongoose.mongoose = { conn: null, promise: null };
 }
 
 export async function connect() {
   if (cached.conn) {
-    return cached.conn;
+    return;
   }
 
   if (!cached.promise) {

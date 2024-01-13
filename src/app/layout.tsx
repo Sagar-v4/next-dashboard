@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
-import { connect } from "@/lib/db";
 import { fontSans } from "@/lib/fonts";
+import { connect } from "@/lib/db/mongodb";
 import { siteConfig } from "@/config/site";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
