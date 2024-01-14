@@ -46,4 +46,9 @@ export const authLinks = {
     title: "Two Factor Authentication",
     href: "/2fa",
   },
+  error: {
+    title:
+      "If user login with same emailid with multiple oath providers, this error page will be shown rather than default error page",
+    href: "/auth-error",
+  },
 };

@@ -1,12 +1,23 @@
 import type { NextAuthConfig } from "next-auth";
+import Google from "next-auth/providers/google";
+import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { IUserBase } from "@/lib/model/user";
+import { github, google } from "@/config/env";
 
 export default {
   providers: [
+    Google({
+      clientId: google.GOOGLE_CLIENT_ID,
+      clientSecret: google.GOOGLE_CLIENT_SECRET,
+    }),
+    GitHub({
+      clientId: github.GITHUB_CLIENT_ID,
+      clientSecret: github.GITHUB_CLIENT_SECRET,
+    }),
     Credentials({
       async authorize(credentials): Promise<any> {
         const validateFields = LoginSchema.safeParse(credentials);

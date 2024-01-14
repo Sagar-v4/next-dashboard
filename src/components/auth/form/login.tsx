@@ -15,16 +15,21 @@ import {
 } from "@/components/ui/form";
 import { LoginSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
-import { useRouter } from "next/navigation";
 import { login } from "@/actions/auth/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!"
+      : "";
 
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
@@ -113,7 +118,7 @@ export const LoginForm = () => {
                 )}
               />
             </div>
-            <FormError message={error} />
+            <FormError message={error || urlError} />
             <FormSuccess message={success} />
             <Button type="submit" disabled={isPending} className="w-full">
               Login

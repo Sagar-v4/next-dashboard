@@ -1,3 +1,5 @@
+import { authLinks } from "@/config/site";
+
 /**
  * An array of routes that are accessible to the public
  * These routes do not require authentication
@@ -14,11 +16,12 @@ export const publicRoutes: string[] = [
  * @type {string[]}
  */
 export const authRoutes: string[] = [
-  "/login",
-  "/register",
-  "/2fa",
-  "/reset",
-  "/create",
+  authLinks.login.href,
+  authLinks.error.href,
+  authLinks.reset.href,
+  authLinks.create.href,
+  authLinks.register.href,
+  authLinks.twoFactorAuth.href,
 ];
 
 /**

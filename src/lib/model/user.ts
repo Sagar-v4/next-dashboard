@@ -14,7 +14,7 @@ const userSchema = new Schema({
     unique: true,
     // validate: { validator: validator.isEmail, message: "Invalid Email!" },
   },
-  isEmailVerified: { type: Date },
+  emailVerified: { type: Date },
   phone: { type: String },
   isPhoneVerified: { type: Date },
   twoFactorAuthentication: { type: Date },
@@ -23,6 +23,7 @@ const userSchema = new Schema({
     {
       type: String,
       enum: Object.values(userRoles),
+      default: userRoles.USER,
     },
   ],
   accounts: { type: String, ref: "Account" },
@@ -49,7 +50,7 @@ export interface IUserSchema extends Document {
   firstName: String;
   lastName: String;
   email: String;
-  isEmailVerified?: Date;
+  emailVerified?: Date;
   phone?: String;
   isPhoneVerified?: Date;
   twoFactorAuthentication?: Date;
@@ -84,12 +85,12 @@ userSchema.methods.toPublicJSON = function () {
   return _.omit(this._doc, ["password", "__v"]);
 };
 
-userSchema.pre("save", async function (next) {
-  if (!this.roles.length) {
-    this.roles.push(userRoles.USER);
-  }
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   if (!this.roles.length) {
+//     this.roles.push(userRoles.USER);
+//   }
+//   next();
+// });
 
 export interface IUserBase extends IUserSchema {
   hashPassword(password: string): string;
