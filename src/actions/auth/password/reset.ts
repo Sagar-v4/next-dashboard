@@ -44,7 +44,7 @@ export const reset = async (
       return { error: "Failed to generate token!" };
     }
 
-    const forgotPasswordLink = `${origin}${authLinks.create.href}?token=${resetToken?.token}`;
+    const forgotPasswordLink = `${origin}${authLinks.create.href}?token=${resetToken.token}`;
     const isEMailSent: boolean = await sendResetEmail(
       resetToken.email as string,
       forgotPasswordLink

@@ -8,7 +8,7 @@ import { generateToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";
 import { ITokenBase } from "@/lib/model/token";
-import { sendVerificationEmail } from "@/helper/smtp-email";
+import { sendRegistrationEmail } from "@/helper/smtp-email";
 
 type registrationType = z.SafeParseReturnType<
   {
@@ -41,27 +41,27 @@ export const register = async (
       return { error: "Email already in use!" };
     }
 
-    const verificationToken: ITokenBase | null = await generateToken(
+    const registrationToken: ITokenBase | null = await generateToken(
       email,
       TokenTypes.REGISTRATION,
       {
         name: userName,
       }
     );
-    if (!verificationToken) {
+    if (!registrationToken) {
       return { error: "Failed to generate token!" };
     }
 
-    const createPasswordLink: string = `${origin}${authLinks.create.href}?token=${verificationToken?.token}`;
-    const isEMailSent: boolean = await sendVerificationEmail(
-      verificationToken.email as string,
+    const createPasswordLink: string = `${origin}${authLinks.create.href}?token=${registrationToken.token}`;
+    const isEMailSent: boolean = await sendRegistrationEmail(
+      registrationToken.email as string,
       createPasswordLink
     );
     if (!isEMailSent) {
       return { error: "Failed to send email!" };
     }
 
-    return { success: "Verification email sent!" };
+    return { success: "Registration email sent!" };
   } catch (error) {
     console.log("🚀 ~ error:", error);
     return { error: (error as Error).message };

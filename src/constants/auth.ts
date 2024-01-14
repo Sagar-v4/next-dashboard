@@ -9,8 +9,9 @@ export enum temporaryTypes {
 }
 
 export enum TokenTypes {
-  FORGOT = "FORGOT PASSWORD", // Reset
-  REGISTRATION = "REGISTRATION", // Verification
+  FORGOT = "FORGOT PASSWORD",
+  REGISTRATION = "REGISTRATION",
+  VERIFICATION = "VERIFICATION",
   "2FA" = "TWO FACTOR AUTHENTICATION",
 }
 
