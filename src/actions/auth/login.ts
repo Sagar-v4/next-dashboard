@@ -74,6 +74,7 @@ type loginType = z.SafeParseReturnType<
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   try {
     const validatedFields: loginType = LoginSchema.safeParse(values);
+    console.log("🚀 ~ login ~ validatedFields:", validatedFields);
     if (!validatedFields.success) {
       return { error: "Invalid fields!" };
     }
@@ -115,11 +116,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       success: "Creadentials verified succesfully!",
     };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
+    console.log("🚀 ~ login ~ error:", error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials!" };
+        case "AuthorizedCallbackError":
+          return { error: "Access denied!" };
         default:
           return { error: "Something went wrong!" };
       }

@@ -33,6 +33,7 @@ export const {
       const existingUser = await getUserById(user.id);
 
       // Prevent sign in without email verification
+      // TODO: send email for verification if not verified
       if (!existingUser?.emailVerified) return false;
 
       // TODO: add 2FA check
