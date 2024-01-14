@@ -8,6 +8,12 @@ export enum temporaryTypes {
   "2FA" = "TWO FACTOR AUTHENTICATION",
 }
 
+export enum TokenTypes {
+  FORGOT = "FORGOT PASSWORD",
+  VERIFICATION = "VERIFICATION",
+  "2FA" = "TWO FACTOR AUTHENTICATION",
+}
+
 export enum userRoles {
   USER = "USER",
   ADMIN = "ADMIN",
