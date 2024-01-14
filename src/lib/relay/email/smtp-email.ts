@@ -11,12 +11,12 @@ import { smtpMail } from "@/config/env";
 
 interface Mail {
   to: string;
-  name: string;
   subject: string;
   body: string;
+  name?: string;
 }
 
-export const sendSMTPMail = async ({ to, name, subject, body }: Mail) => {
+export const sendSMTPMail = async ({ to, subject, body, name }: Mail) => {
   try {
     const { SMTP_EMAIL, SMTP_PASSWORD } = smtpMail;
 
