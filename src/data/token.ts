@@ -1,32 +1,61 @@
+import { DeleteResult, ObjectId } from "mongodb";
 import { TokenTypes } from "@/constants/auth";
-import Token, { ITokenBase } from "@/lib/model/token";
 import { emailWithoutTagRegex } from "@/utils/regex";
+import Token, { ITokenBase } from "@/lib/model/token";
 
-export const getVerificationTokenByEmail = async (
-  email: string
+export const getTokenByEmail = async (
+  email: string,
+  type: TokenTypes
 ): Promise<ITokenBase | null> => {
   try {
     const emailRegex: RegExp = emailWithoutTagRegex(email);
-    const verificationToken: ITokenBase | null = await Token.findOne({
+    const savedToken: ITokenBase | null = await Token.findOne({
       email: { $regex: emailRegex },
-      type: TokenTypes.VERIFICATION,
+      type: type,
     });
 
-    return verificationToken;
+    return savedToken;
   } catch (error) {
     return null;
   }
 };
 
-export const getVerificationTokenByToken = async (
+export const getTokenByToken = async (
   token: string
 ): Promise<ITokenBase | null> => {
   try {
-    const verificationToken: ITokenBase | null = await Token.findOne({
+    const savedToken: ITokenBase | null = await Token.findOne({
       token: token,
     });
 
-    return verificationToken;
+    return savedToken;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const deletTokenById = async (
+  tokenId: ObjectId
+): Promise<ITokenBase | null> => {
+  try {
+    const deletedToken: ITokenBase | null =
+      await Token.findByIdAndDelete(tokenId);
+
+    return deletedToken;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const deleteTokenByToken = async (
+  token: string
+): Promise<DeleteResult | null> => {
+  try {
+    const deletedToken = await Token.deleteOne({
+      token: token,
+    });
+
+    return deletedToken;
   } catch (error) {
     return null;
   }

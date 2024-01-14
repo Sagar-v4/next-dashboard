@@ -6,8 +6,9 @@ import { RegisterSchema } from "@/schemas";
 import { IUserBase } from "@/lib/model/user";
 import { getUserByEmail } from "@/data/user";
 import { ITokenBase } from "@/lib/model/token";
-import { generateVerificationToken } from "@/lib/tokens";
+import { generateToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/helper/smtp-email";
+import { TokenTypes } from "@/constants/auth";
 
 type registrationType = z.SafeParseReturnType<
   {
@@ -40,10 +41,13 @@ export const register = async (
       return { error: "Email already in use!" };
     }
 
-    const verificationToken: ITokenBase | null =
-      await generateVerificationToken(email, {
+    const verificationToken: ITokenBase | null = await generateToken(
+      email,
+      TokenTypes.REGISTRATION,
+      {
         name: userName,
-      });
+      }
+    );
 
     if (!verificationToken) {
       return { error: "Failed to generate token!" };

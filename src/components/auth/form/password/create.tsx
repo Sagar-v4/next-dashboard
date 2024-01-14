@@ -26,7 +26,7 @@ export const CreatePasswordForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const uuid: string | null = searchParams.get("id");
+  const token: string | null = searchParams.get("token");
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -43,14 +43,24 @@ export const CreatePasswordForm = () => {
     setError("");
     setSucces("");
 
+    if (!token) {
+      setError("Token is missing!");
+    }
+
     startTransition(async () => {
-      createPassword(uuid, values).then((data) => {
-        setError(data.error);
-        if (data.success) {
-          setSucces(data.success);
-          router.push(authLinks.login.href);
-        }
-      });
+      createPassword(token, values)
+        .then((data: any) => {
+          if (data.error) {
+            setError(data.error);
+          }
+          if (data.success) {
+            setSucces(data.success);
+            router.push(authLinks.login.href);
+          }
+        })
+        .catch(() => {
+          setError("Something went wrong!");
+        });
     });
   };
 
