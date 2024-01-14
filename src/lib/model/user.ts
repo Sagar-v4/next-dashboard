@@ -6,8 +6,7 @@ import { userRoles } from "@/constants/auth";
 // import validator from "validator";
 
 const userSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  name: { type: String, required: true },
   email: {
     type: String,
     required: true,
@@ -47,10 +46,9 @@ const userSchema = new Schema({
 
 export interface IUserSchema extends Document {
   _id?: Types.ObjectId;
-  firstName: String;
-  lastName: String;
+  name: String;
   email: String;
-  emailVerified?: Date;
+  emailVerified: Date;
   phone?: String;
   isPhoneVerified?: Date;
   twoFactorAuthentication?: Date;

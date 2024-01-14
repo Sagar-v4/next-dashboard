@@ -60,10 +60,20 @@ const saveTemporaryDetails = async (uuid: string, values: any) => {
   }
 };
 
+type loginType = z.SafeParseReturnType<
+  {
+    email: string;
+    password: string;
+  },
+  {
+    email: string;
+    password: string;
+  }
+>;
+
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   try {
-    const validatedFields = LoginSchema.safeParse(values);
-
+    const validatedFields: loginType = LoginSchema.safeParse(values);
     if (!validatedFields.success) {
       return { error: "Invalid fields!" };
     }

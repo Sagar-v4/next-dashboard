@@ -5,9 +5,9 @@ export const getUserByEmail = async (
   email: string
 ): Promise<IUserBase | null> => {
   try {
-    const emailRegex: RegExp = emailWithoutTagRegex(email);
+    // const emailRegex: RegExp = emailWithoutTagRegex(email);
     const user: IUserBase | null = await User.findOne({
-      email: { $regex: emailRegex },
+      email: email, //{ $regex: emailRegex },
     });
 
     return user;
