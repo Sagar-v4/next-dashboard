@@ -7,7 +7,12 @@ export const LoginSchema = z.object({
   password: z.string().min(1, {
     message: "Password is required",
   }),
+  code: z.string().min(6, { message: "It should be 6 numbers" }).optional(),
 });
+// .refine((data) => !/[^\d]/.test(data?.code as string), {
+//   message: "It should be numbers only",
+//   path: ["code"],
+// });
 
 export const RegisterSchema = z.object({
   email: z.string().email({

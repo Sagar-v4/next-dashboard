@@ -1,77 +1,36 @@
 "use server";
 
 import * as z from "zod";
-import { v4 as uuidv4 } from "uuid";
-import { AuthError } from "next-auth";
+import crypto from "crypto";
 import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 import { LoginSchema } from "@/schemas";
-import { authLinks } from "@/config/site";
-import Temporary from "@/lib/model/temporary";
-import { temporaryTypes } from "@/constants/auth";
+import { IUserBase } from "@/lib/model/user";
+import { generateToken } from "@/lib/tokens";
+import { getUserByEmail } from "@/data/user";
+import { TokenTypes } from "@/constants/auth";
+import { ITokenBase } from "@/lib/model/token";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import User, { IUserBase } from "@/lib/model/user";
-import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
-
-const send2FAMail = async (
-  code: string,
-  values: z.infer<typeof LoginSchema>
-) => {
-  try {
-    return await sendSMTPMail({
-      to: values.email,
-      name: "`${values.firstName} ${values.lastName}`",
-      subject: "Two Factor Authentication",
-      body: `<p>Your 2FA Code is: <strong>${code}</strong></p>`,
-    });
-  } catch (error) {
-    console.log("🚀 ~ error:", error);
-  }
-};
-
-const getUser = async (values: z.infer<typeof LoginSchema>) => {
-  try {
-    const user: IUserBase | null = await User.findOne({ email: values.email });
-    if (user === null) {
-      return null; // { error: "Email is not registered!" };
-    }
-    const isPasswordMatching: boolean = user.compareHash(values.password);
-    console.log("🚀 ~ getUser ~ isPasswordMatching:", isPasswordMatching);
-
-    if (isPasswordMatching) {
-      return user;
-    }
-  } catch (error) {
-    console.log("🚀 ~ getUser ~ error:", error);
-  }
-};
-
-const saveTemporaryDetails = async (uuid: string, values: any) => {
-  try {
-    const tempData = new Temporary({
-      uuid: uuid,
-      type: temporaryTypes["2FA"],
-      details: values,
-      expiresAt: Date.now(),
-    });
-
-    await tempData.save();
-  } catch (error) {
-    console.log("🚀 ~ saveTemporaryDetails ~ error:", error);
-  }
-};
+import { send2FAEmail } from "@/helper/smtp-email";
+import { deletTokenById, getTokenByEmail } from "@/data/token";
 
 type loginType = z.SafeParseReturnType<
   {
     email: string;
     password: string;
+    code?: string | undefined;
   },
   {
     email: string;
     password: string;
+    code?: string | undefined;
   }
 >;
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string | null
+) => {
   try {
     const validatedFields: loginType = LoginSchema.safeParse(values);
     console.log("🚀 ~ login ~ validatedFields:", validatedFields);
@@ -79,44 +38,90 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       return { error: "Invalid fields!" };
     }
 
-    const { email, password } = validatedFields.data;
+    const { email, password, code } = validatedFields.data;
 
-    await signIn("credentials", {
+    const existingUser: IUserBase | null = await getUserByEmail(email);
+    console.log("🚀 ~ existingUser:", existingUser);
+    if (!existingUser || !existingUser.email || !existingUser.password) {
+      return { error: "User doesn't exist!" };
+    }
+
+    if (!existingUser.emailVerified) {
+      const verificationEmailToken: ITokenBase | null = await generateToken(
+        existingUser.email as string,
+        TokenTypes.VERIFICATION
+      );
+      if (!verificationEmailToken) {
+        return { error: "Failed to generate token!" };
+      }
+
+      // TODO: send email verification mail
+      // await sendVerificationEmail(
+      //   verificationToken.email,
+      //   verificationToken.token,
+      // );
+
+      return { success: "Verification email sent!" };
+    }
+
+    if (existingUser.twoFactorAuthentication && existingUser.email) {
+      if (code) {
+        const twoFactorToken: ITokenBase | null = await getTokenByEmail(
+          existingUser.email as string,
+          TokenTypes["2FA"]
+        );
+        console.log("🚀 ~ twoFactorToken:", twoFactorToken);
+        if (!twoFactorToken) {
+          return { error: "Two factor token not found!" };
+        }
+        if (twoFactorToken.details.code !== code) {
+          return { error: "Invalid Code!" };
+        }
+
+        const hasExpired =
+          new Date(twoFactorToken.expiresAt as number) < new Date();
+        if (hasExpired) {
+          return { error: "Code expired!" };
+        }
+
+        const tokenDeleted: ITokenBase | null = await deletTokenById(
+          twoFactorToken._id
+        );
+        if (!tokenDeleted) {
+          return { error: "Failed to delete token!" };
+        }
+      } else {
+        const code: string = crypto.randomInt(1_00_000, 9_99_999).toString();
+        const verification2FAToken: ITokenBase | null = await generateToken(
+          existingUser.email as string,
+          TokenTypes["2FA"],
+          {
+            code: code,
+          }
+        );
+        if (!verification2FAToken) {
+          return { error: "Failed to generate token!" };
+        }
+
+        const isEMailSent: boolean = await send2FAEmail(
+          verification2FAToken.email as string,
+          verification2FAToken.details.code as string
+        );
+        if (!isEMailSent) {
+          return { error: "Failed to send email!" };
+        }
+
+        return { twoFactor: true };
+      }
+    }
+    const res = await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
-
-    const user: any = await getUser(values);
-    console.log("🚀 ~ login ~ user:", user);
-
-    if (!user) {
-      return { error: "Invalid email or password!!" };
-    }
-
-    if (user.twoFactorAuthentication) {
-      const uuid: string = uuidv4();
-      console.log("🚀 ~ login ~ uuid:", uuid);
-      const code: string = String(Math.floor(100000 + Math.random() * 900000));
-      await saveTemporaryDetails(uuid, { code: code, email: user.email });
-
-      const isMailSent = await send2FAMail(code, values);
-      const TwoFactorAuthLink: any = `${authLinks.twoFactorAuth.href}?id=${uuid}`;
-
-      if (!isMailSent) {
-        return { error: "Failed to send email!!" };
-      }
-      return {
-        success: "2FA Verification email sent!",
-        TwoFactorAuthLink: TwoFactorAuthLink,
-      };
-    }
-
-    return {
-      success: "Creadentials verified succesfully!",
-    };
+    console.log("🚀 ~ res:", res);
   } catch (error) {
-    console.log("🚀 ~ login ~ error:", error);
+    console.log("🚀 ~ error:", error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

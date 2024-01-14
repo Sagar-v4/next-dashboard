@@ -6,6 +6,10 @@ import { db } from "@/config/env";
 import authConfig from "@/auth.config";
 import { authLinks } from "@/config/site";
 import { getUserById } from "@/data/user";
+import { IUserBase } from "./lib/model/user";
+import { ITokenBase } from "./lib/model/token";
+import { deletTokenById, getTokenByEmail } from "./data/token";
+import { TokenTypes } from "./constants/auth";
 
 const client = new MongoClient(db.MONGODB_URI);
 const clientPromise = client.connect();
@@ -30,11 +34,30 @@ export const {
       // Allow OAuth without email verification
       if (account?.provider !== "credentials") return true;
 
-      const existingUser = await getUserById(user.id);
+      const existingUser: IUserBase | null = await getUserById(user.id);
+      if (!existingUser) return false;
 
       // Prevent sign in without email verification
+      if (!existingUser.emailVerified) return false;
+
       // TODO: send email for verification if not verified
-      if (!existingUser?.emailVerified) return false;
+
+      // TODO: after verification save date till it will be verified logic
+      if (existingUser.twoFactorAuthentication) {
+        const twoFactorToken: ITokenBase | null = await getTokenByEmail(
+          existingUser.email as string,
+          TokenTypes["2FA"]
+        );
+        // if twoFactorToken is not exist then good to go
+        if (!twoFactorToken) return true;
+
+        // if twoFactorToken exist then delete that token
+        const tokenDeleted: ITokenBase | null = await deletTokenById(
+          twoFactorToken._id
+        );
+        // if tokenDeleted no deleted then throw error
+        if (!tokenDeleted) return false;
+      }
 
       // TODO: add 2FA check
       return true;

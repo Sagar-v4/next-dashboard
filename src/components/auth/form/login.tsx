@@ -18,19 +18,19 @@ import { authLinks } from "@/config/site";
 import { login } from "@/actions/auth/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
 
+  const [show2FA, setShow2FA] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
   const [success, setSucces] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -48,80 +48,124 @@ export const LoginForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      login(values).then((data: any) => {
-        setError(data.error);
-        if (data.success) {
-          setSucces(data.success);
-          if (data.TwoFactorAuthLink) {
-            router.push(data.TwoFactorAuthLink);
-          } else {
-            router.push("/");
+      login(values)
+        .then((data: any | undefined) => {
+          if (data?.error) {
+            // form.reset();
+            if (show2FA && data.error === "Invalid credentials!") {
+              setShow2FA(false);
+            } else {
+              setError(data.error);
+            }
           }
-        }
-      });
+          if (data?.success) {
+            // form.reset();
+            setSucces(data.success);
+          }
+          if (data?.twoFactor) {
+            setShow2FA(true);
+          }
+        })
+        .catch((e) => {
+          console.log("🚀 ~ startTransition ~ e:", e);
+          setError("dsddfdsSomething went wrong!!!");
+        });
     });
   };
 
   return (
     <>
       <CardWrapper
-        headerLabel="Welcome back"
-        backButtonLabel="Don't have an account?"
-        backButtonHref={authLinks.register.href}
-        showSocial
+        headerLabel={show2FA ? "Two Factor Authentication" : "Welcome back"}
+        backButtonLabel={show2FA ? "Back to Login" : "Don't have an account?"}
+        backButtonHref={show2FA ? "" : authLinks.register.href}
+        showSocial={!show2FA}
+        onClickBackButton={() => {
+          if (show2FA) {
+            setShow2FA(false);
+          }
+        }}
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        disabled={isPending}
-                        placeholder="john.doe@example.com"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="password"
-                        disabled={isPending}
-                        placeholder="******"
-                      />
-                    </FormControl>
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="link"
-                      className="p-0 font-normal"
-                    >
-                      <Link href={authLinks.reset.href}>Forgot password?</Link>
-                    </Button>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!show2FA && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="email"
+                            disabled={isPending}
+                            placeholder="john.doe@example.com"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            disabled={isPending}
+                            placeholder="******"
+                          />
+                        </FormControl>
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="link"
+                          className="p-0 font-normal"
+                        >
+                          <Link href={authLinks.reset.href}>
+                            Forgot password?
+                          </Link>
+                        </Button>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+              {show2FA && (
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Two Factor Code</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          maxLength={6}
+                          disabled={isPending}
+                          placeholder="123456"
+                        />
+                      </FormControl>
+                      {/* <FormDescription>Description</FormDescription> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
             <FormError message={error || urlError} />
             <FormSuccess message={success} />
             <Button type="submit" disabled={isPending} className="w-full">
-              Login
+              {show2FA ? "Confirm" : "Login"}
             </Button>
           </form>
         </Form>
