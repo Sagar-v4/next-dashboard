@@ -15,7 +15,7 @@ export interface ITokenSchema extends Document {
   type: String;
   email: String;
   token: String;
-  details?: Object;
+  details?: any | Object;
   createdAt: Date;
   expiresAt: Number;
 }

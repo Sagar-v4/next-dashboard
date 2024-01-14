@@ -53,7 +53,7 @@ export interface IUserSchema extends Document {
   isPhoneVerified?: Date;
   twoFactorAuthentication?: Date;
   password?: String;
-  accounts: Array<Types.ObjectId>;
+  accounts?: Array<Types.ObjectId>;
   roles: Array<String>;
   createdAt: Date;
 
@@ -83,12 +83,12 @@ userSchema.methods.toPublicJSON = function () {
   return _.omit(this._doc, ["password", "__v"]);
 };
 
-// userSchema.pre("save", async function (next) {
-//   if (!this.roles.length) {
-//     this.roles.push(userRoles.USER);
-//   }
-//   next();
-// });
+userSchema.pre("save", async function (next) {
+  if (!this.roles.length) {
+    this.roles.push(userRoles.USER);
+  }
+  next();
+});
 
 export interface IUserBase extends IUserSchema {
   hashPassword(password: string): string;
