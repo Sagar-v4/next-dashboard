@@ -39,11 +39,8 @@ export const ResetPasswordForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      const origin =
-        typeof window !== undefined && window.location.origin
-          ? window.location.origin
-          : "";
-      await reset(values, origin).then((data) => {
+      const origin = window.location.origin;
+      await reset(origin, values).then((data) => {
         setError(data.error);
         setSucces(data.success);
       });

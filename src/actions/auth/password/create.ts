@@ -52,11 +52,7 @@ const registration = async (
 
     const { password } = validatedFields.data;
     newUser.password = newUser.hashPassword(password);
-
-    const user = await newUser.save();
-    if (!user) {
-      return { error: "Failed to save user password!" };
-    }
+    await newUser.save();
 
     const tokenDeleted: ITokenBase | null = await deletTokenById(
       existingToken._id
@@ -66,6 +62,36 @@ const registration = async (
     }
 
     return { success: "Password created successfully!" };
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+    throw error;
+  }
+};
+
+const forgot = async (
+  validatedFields: any,
+  existingToken: ITokenBase
+): returnType => {
+  try {
+    const existingUser: IUserBase | null = await getUserByEmail(
+      existingToken.email as string
+    );
+    if (!existingUser) {
+      return { error: "Email not found!" };
+    }
+
+    const { password } = validatedFields.data;
+    existingUser.password = existingUser.hashPassword(password);
+    await existingUser.save();
+
+    const tokenDeleted: ITokenBase | null = await deletTokenById(
+      existingToken._id
+    );
+    if (!tokenDeleted) {
+      return { error: "Failed to delete token!" };
+    }
+
+    return { success: "Password reset successfully!" };
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw error;
@@ -94,11 +120,6 @@ export const createPassword = async (
       return { error: "Token doesn't exist!" };
     }
 
-    console.log(
-      "🚀 ~ new Date(existingToken.expiresAt as number) < new Date():",
-      existingToken.expiresAt as number,
-      new Date().getTime()
-    );
     const hasExpired: boolean =
       (existingToken.expiresAt as number) < new Date().getTime();
     if (hasExpired) {
@@ -108,6 +129,8 @@ export const createPassword = async (
     switch (existingToken.type) {
       case TokenTypes.REGISTRATION:
         return await registration(validatedFields, existingToken);
+      case TokenTypes.FORGOT:
+        return await forgot(validatedFields, existingToken);
       default:
         return { error: "Invalid Token type!" };
     }

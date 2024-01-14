@@ -4,11 +4,11 @@ import * as z from "zod";
 import { authLinks } from "@/config/site";
 import { RegisterSchema } from "@/schemas";
 import { IUserBase } from "@/lib/model/user";
-import { getUserByEmail } from "@/data/user";
-import { ITokenBase } from "@/lib/model/token";
 import { generateToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/helper/smtp-email";
+import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";
+import { ITokenBase } from "@/lib/model/token";
+import { sendVerificationEmail } from "@/helper/smtp-email";
 
 type registrationType = z.SafeParseReturnType<
   {
@@ -48,17 +48,15 @@ export const register = async (
         name: userName,
       }
     );
-
     if (!verificationToken) {
       return { error: "Failed to generate token!" };
     }
 
-    const createPasswordLink = `${origin}${authLinks.create.href}?token=${verificationToken?.token}`;
+    const createPasswordLink: string = `${origin}${authLinks.create.href}?token=${verificationToken?.token}`;
     const isEMailSent: boolean = await sendVerificationEmail(
       verificationToken.email as string,
       createPasswordLink
     );
-
     if (!isEMailSent) {
       return { error: "Failed to send email!" };
     }
