@@ -63,7 +63,6 @@ export const register = async (
 
     return { success: "Registration email sent!" };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: (error as Error).message };
   }
 };

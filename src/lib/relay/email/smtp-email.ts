@@ -37,7 +37,6 @@ export const sendSMTPMail = async ({ to, subject, body, name }: Mail) => {
     });
     return sendResult.response.includes("2.0.0 OK") as boolean;
   } catch (error) {
-    console.log("🚀 ~ file: mail.ts:39 ~ sendMail ~ error:", error);
     return false;
   }
 };

@@ -25,12 +25,9 @@ export default {
         if (validateFields.success) {
           const { email, password } = validateFields.data;
           const user: IUserBase | null = await getUserByEmail(email);
-          console.log("🚀 ~ authorize ~ user:", user);
-
           if (!user || !user.password) return null;
 
           const passwordMatch = user.compareHash(password);
-
           if (passwordMatch) return user;
         }
 

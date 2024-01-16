@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
+import { TokenTypes } from "@/constants/auth";
 import { getTokenByEmail } from "@/data/token";
 import Token, { ITokenBase } from "@/lib/model/token";
-import { TokenTypes } from "@/constants/auth";
 
 export const generateToken = async (
   email: string,
@@ -27,7 +27,6 @@ export const generateToken = async (
 
     return createdToken;
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return null;
   }
 };

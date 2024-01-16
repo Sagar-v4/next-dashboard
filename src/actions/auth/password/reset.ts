@@ -55,7 +55,6 @@ export const reset = async (
 
     return { success: "Reset email sent!" };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: (error as Error).message };
   }
 };

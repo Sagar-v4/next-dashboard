@@ -1,15 +1,15 @@
 import NextAuth from "next-auth";
 import { MongoClient } from "mongodb";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
 
 import { db } from "@/config/env";
 import authConfig from "@/auth.config";
 import { authLinks } from "@/config/site";
 import { getUserById } from "@/data/user";
-import { IUserBase } from "./lib/model/user";
-import { ITokenBase } from "./lib/model/token";
-import { deletTokenById, getTokenByEmail } from "./data/token";
-import { TokenTypes } from "./constants/auth";
+import { IUserBase } from "@/lib/model/user";
+import { TokenTypes } from "@/constants/auth";
+import { ITokenBase } from "@/lib/model/token";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { deletTokenById, getTokenByEmail } from "@/data/token";
 
 const client = new MongoClient(db.MONGODB_URI);
 const clientPromise = client.connect();
@@ -63,7 +63,6 @@ export const {
       return true;
     },
     async session({ token, session }) {
-      console.log("🚀 ~ session ~ token, session:", token, session);
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }

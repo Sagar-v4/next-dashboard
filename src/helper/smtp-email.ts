@@ -12,7 +12,6 @@ export const sendRegistrationEmail = async (
     });
     return true;
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return false;
   }
 };
@@ -29,7 +28,6 @@ export const sendResetEmail = async (
     });
     return true;
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return false;
   }
 };
@@ -46,7 +44,6 @@ export const send2FAEmail = async (
     });
     return true;
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return false;
   }
 };

@@ -2,8 +2,8 @@
 
 import * as z from "zod";
 import crypto from "crypto";
-import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { IUserBase } from "@/lib/model/user";
 import { generateToken } from "@/lib/tokens";
@@ -33,7 +33,6 @@ export const login = async (
 ) => {
   try {
     const validatedFields: loginType = LoginSchema.safeParse(values);
-    console.log("🚀 ~ login ~ validatedFields:", validatedFields);
     if (!validatedFields.success) {
       return { error: "Invalid fields!" };
     }
@@ -41,7 +40,6 @@ export const login = async (
     const { email, password, code } = validatedFields.data;
 
     const existingUser: IUserBase | null = await getUserByEmail(email);
-    console.log("🚀 ~ existingUser:", existingUser);
     if (!existingUser || !existingUser.email || !existingUser.password) {
       return { error: "User doesn't exist!" };
     }
@@ -70,7 +68,6 @@ export const login = async (
           existingUser.email as string,
           TokenTypes["2FA"]
         );
-        console.log("🚀 ~ twoFactorToken:", twoFactorToken);
         if (!twoFactorToken) {
           return { error: "Two factor token not found!" };
         }
@@ -114,14 +111,12 @@ export const login = async (
         return { twoFactor: true };
       }
     }
-    const res = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
-    console.log("🚀 ~ res:", res);
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

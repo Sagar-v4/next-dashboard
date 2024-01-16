@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { ResetSchema } from "@/schemas";
 import { authLinks } from "@/config/site";
@@ -53,7 +52,7 @@ export const ResetPasswordForm = () => {
         headerLabel="Forgot your password"
         backButtonLabel="Back to Login"
         backButtonHref={authLinks.login.href}
-        // showSocial
+        showSocial={false}
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -72,7 +71,6 @@ export const ResetPasswordForm = () => {
                         placeholder="john.doe@example.com"
                       />
                     </FormControl>
-                    {/* <FormDescription>Description</FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}

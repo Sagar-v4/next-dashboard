@@ -4,6 +4,7 @@ import * as z from "zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -18,7 +19,6 @@ import { authLinks } from "@/config/site";
 import { login } from "@/actions/auth/login";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
@@ -52,8 +52,9 @@ export const LoginForm = () => {
         .then((data: any | undefined) => {
           if (data?.error) {
             // form.reset();
+            setError(data.error);
             if (show2FA && data.error === "Invalid credentials!") {
-              setShow2FA(false);
+              // setShow2FA(false);
             } else {
               setError(data.error);
             }
@@ -67,7 +68,6 @@ export const LoginForm = () => {
           }
         })
         .catch((e) => {
-          console.log("🚀 ~ startTransition ~ e:", e);
           setError("dsddfdsSomething went wrong!!!");
         });
     });
@@ -79,9 +79,11 @@ export const LoginForm = () => {
         headerLabel={show2FA ? "Two Factor Authentication" : "Welcome back"}
         backButtonLabel={show2FA ? "Back to Login" : "Don't have an account?"}
         backButtonHref={show2FA ? "" : authLinks.register.href}
-        showSocial={!show2FA}
+        showSocial={false && !show2FA}
         onClickBackButton={() => {
           if (show2FA) {
+            setError("");
+            setSucces("");
             setShow2FA(false);
           }
         }}
@@ -155,7 +157,6 @@ export const LoginForm = () => {
                           placeholder="123456"
                         />
                       </FormControl>
-                      {/* <FormDescription>Description</FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}

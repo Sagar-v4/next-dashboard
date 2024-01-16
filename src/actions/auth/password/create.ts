@@ -63,7 +63,6 @@ const registration = async (
 
     return { success: "Password created successfully!" };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     throw error;
   }
 };
@@ -93,7 +92,6 @@ const forgot = async (
 
     return { success: "Password reset successfully!" };
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     throw error;
   }
 };
@@ -135,7 +133,6 @@ export const createPassword = async (
         return { error: "Invalid Token type!" };
     }
   } catch (error) {
-    console.log("🚀 ~ error:", error);
     return { error: (error as Error).message as string };
   }
 };
