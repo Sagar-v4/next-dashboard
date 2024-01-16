@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install Recommended Extensions",
+      "type": "shell",
+      "command": "jq '.recommendations | map(\"code --install-extension \\(.)\") | .[]' .vscode/extensions.json | xargs -I {} sh -c {}",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
