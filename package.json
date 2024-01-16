@@ -12,7 +12,7 @@
     "prod": "clear && next build && next start",
     "format": "npm run prettier -- --write",
     "check-formats": "npm run prettier -- --list-different",
-    "clean": "rm -rf node_modules coverage dist .nyc_output",
+    "clean": "rm -rf node_modules coverage dist .nyc_output .next",
     "validate": "yarn check-formats && yarn lint && yarn build",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts|tsx)\""
   },
