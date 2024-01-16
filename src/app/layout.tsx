@@ -27,7 +27,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
         <head />
         <body
           className={cn(
-            "min-h-screen border-4 border-red-500 bg-background font-sans antialiased",
+            "min-h-screen border-2 border-red-500 bg-background font-sans antialiased",
             fontSans.variable
           )}
         >

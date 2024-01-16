@@ -1,20 +1,23 @@
 import mongoose from "mongoose";
-import { db } from "@/config/env";
 import { MongoClient } from "mongodb";
+import { db } from "@/config/env";
 
 declare global {
   namespace globalThis {
-    var _mongoClientPromise: Promise<MongoClient>;
+    const _mongoClientPromise: Promise<MongoClient>;
   }
-  var mongoose: any;
+  const mongoose: any;
 }
 
-const MONGODB_URI: string = db.MONGODB_URI;
-if (!MONGODB_URI) {
+const MONGODB_URI: string =
+  `${db.MONGODB_URI}/${db.DATABASE_NAME}${
+    db.MONGODB_CONFIG && "?" + db.MONGODB_CONFIG
+  }` ?? "";
+if (!MONGODB_URI || !db.MONGODB_URI || !db.DATABASE_NAME) {
   throw new Error("Mongo URI not found!");
 }
 
-let gloablWithMongoose: any = (global as typeof globalThis) && {
+const gloablWithMongoose: any = (global as typeof globalThis) && {
   mongoose,
 };
 
