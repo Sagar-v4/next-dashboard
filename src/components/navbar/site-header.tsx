@@ -1,7 +1,7 @@
 import { mainNavLinks } from "@/config/site";
-import { MainNav } from "@/components/main-nav";
-import { RightNav } from "@/components/right-nav";
-import { DropdownProfileMenu } from "@/components/user-drop-down";
+import { MainNav } from "@/components/navbar/main-nav";
+import { RightNav } from "@/components/navbar/right-nav";
+import { DropdownProfileMenu } from "@/components/navbar/user-icon/user-drop-down";
 
 export function SiteHeader() {
   return (

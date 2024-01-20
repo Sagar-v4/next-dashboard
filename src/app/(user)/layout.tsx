@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
+
 import "@/styles/globals.css";
 import { auth } from "@/auth";
 import { cn } from "@/lib/utils";
 import { fontSans } from "@/lib/fonts";
 import { siteConfig } from "@/config/site";
-import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "@/components/navbar/site-header";
 
 export const metadata: Metadata = {
   title: {

@@ -3,9 +3,9 @@ import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 
-import { LoginSchema } from "@/schemas";
-import { getUserByEmail } from "@/data/user";
 import { IUserBase } from "@/lib/model/user";
+import { LoginSchema } from "@/schemas/auth";
+import { getUserByEmail } from "@/data/user";
 import { github, google } from "@/config/env";
 
 export default {

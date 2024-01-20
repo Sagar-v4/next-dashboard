@@ -1,13 +1,14 @@
 "use server";
 
 import * as z from "zod";
+
 import { authLinks } from "@/config/site";
-import { RegisterSchema } from "@/schemas";
 import { IUserBase } from "@/lib/model/user";
 import { generateToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";
 import { ITokenBase } from "@/lib/model/token";
+import { RegisterSchema } from "@/schemas/auth";
 import { sendRegistrationEmail } from "@/helper/smtp-email";
 
 type registrationType = z.SafeParseReturnType<

@@ -4,6 +4,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -13,12 +14,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { authLinks } from "@/config/site";
-import { RegisterSchema } from "@/schemas";
+import { RegisterSchema } from "@/schemas/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { register } from "@/actions/auth/register";
-import { FormError } from "@/components/form-error";
-import { FormSuccess } from "@/components/form-success";
+import { FormError } from "@/components/auth/form-error";
+import { FormSuccess } from "@/components/auth/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
 export const RegisterForm = () => {

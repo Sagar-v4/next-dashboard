@@ -1,9 +1,10 @@
 "use server";
 
 import * as z from "zod";
-import { ResetSchema } from "@/schemas";
+
 import { authLinks } from "@/config/site";
 import { IUserBase } from "@/lib/model/user";
+import { ResetSchema } from "@/schemas/auth";
 import { generateToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";

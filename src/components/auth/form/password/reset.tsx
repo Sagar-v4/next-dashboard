@@ -4,6 +4,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -12,13 +13,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ResetSchema } from "@/schemas";
+import { ResetSchema } from "@/schemas/auth";
 import { authLinks } from "@/config/site";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormError } from "@/components/form-error";
+import { FormError } from "@/components/auth/form-error";
 import { reset } from "@/actions/auth/password/reset";
-import { FormSuccess } from "@/components/form-success";
+import { FormSuccess } from "@/components/auth/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
 export const ResetPasswordForm = () => {

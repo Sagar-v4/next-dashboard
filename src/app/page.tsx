@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "@/components/navbar/site-header";
 
 export default function IndexPage() {
   return (
