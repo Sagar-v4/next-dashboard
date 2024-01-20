@@ -3,9 +3,10 @@
 import * as z from "zod";
 import crypto from "crypto";
 import { AuthError } from "next-auth";
+
 import { signIn } from "@/auth";
-import { LoginSchema } from "@/schemas";
 import { IUserBase } from "@/lib/model/user";
+import { LoginSchema } from "@/schemas/auth";
 import { generateToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";

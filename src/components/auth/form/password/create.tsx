@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
+
 import {
   Form,
   FormControl,
@@ -16,9 +17,9 @@ import {
 import { authLinks } from "@/config/site";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CreatePasswordSchema } from "@/schemas";
-import { FormError } from "@/components/form-error";
-import { FormSuccess } from "@/components/form-success";
+import { CreatePasswordSchema } from "@/schemas/auth";
+import { FormError } from "@/components/auth/form-error";
+import { FormSuccess } from "@/components/auth/form-success";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import { createPassword } from "@/actions/auth/password/create";
 

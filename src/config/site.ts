@@ -82,6 +82,13 @@ export const errorLink: keyValue = {
     "If user login with same emailid with multiple oath providers, this error page will be shown rather than default error page",
 };
 
+// Settings
+export const themesLink: keyValue = {
+  title: "Themes",
+  href: "/settings/themes",
+  description: "Theme page",
+};
+
 export const authLinks: objectKeyValue = {
   login: loginLink,
   register: registerLink,
@@ -100,4 +107,8 @@ export const mainNavLinks: objectKeyValue = {
 export const userDropDownLinks: objectKeyValue = {
   profile: profileLink,
   settings: settingLink,
+};
+
+export const uiSettings: objectKeyValue = {
+  themes: themesLink,
 };

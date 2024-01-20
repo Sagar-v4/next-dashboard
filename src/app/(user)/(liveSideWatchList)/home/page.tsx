@@ -1,22 +1,23 @@
 import { Metadata } from "next";
-import { portfolioLink, siteConfig } from "@/config/site";
+
+import { homeLink, siteConfig } from "@/config/site";
 import SessionLogout from "@/components/auth/session-logout";
 
 export const metadata: Metadata = {
   title: {
-    default: portfolioLink.title,
+    default: homeLink.title,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
 };
 
-const PortfolioPage = () => {
+const HomePage = () => {
   return (
     <>
-      <h1 className="mt-20 text-center text-4xl">Portfolio Page</h1>
+      <h1 className="mt-20 text-center text-4xl">Home Page</h1>
       <SessionLogout />
     </>
   );
 };
 
-export default PortfolioPage;
+export default HomePage;

@@ -1,11 +1,12 @@
 "use server";
 
 import * as z from "zod";
+
 import { getUserByEmail } from "@/data/user";
 import { TokenTypes } from "@/constants/auth";
 import { ITokenBase } from "@/lib/model/token";
-import { CreatePasswordSchema } from "@/schemas";
 import User, { IUserBase } from "@/lib/model/user";
+import { CreatePasswordSchema } from "@/schemas/auth";
 import { deletTokenById, getTokenByToken } from "@/data/token";
 
 export type createPasswordType = z.SafeParseReturnType<

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,12 +16,11 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ThemeToggle } from "./theme-toggle";
 import { logout } from "@/actions/auth/logout";
-import Link from "next/link";
-import { SelectDematAccount } from "./select-demat-account";
 import { userDropDownLinks } from "@/config/site";
+import { ThemeToggle } from "@/components/themes/theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SelectDematAccount } from "@/components/navbar/user-icon/select-demat-account";
 
 export function DropdownProfileMenu() {
   const onClickLogout = async () => {
