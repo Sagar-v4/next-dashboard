@@ -5,7 +5,7 @@ import { authLinks, homeLink } from "@/config/site";
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes: string[] = ["/"];
+export const publicRoutes: string[] = ["/", authLinks.create.href];
 
 /**
  * An array of routes that are used for authentication
@@ -16,7 +16,7 @@ export const authRoutes: string[] = [
   authLinks.login.href,
   authLinks.error.href,
   authLinks.reset.href,
-  authLinks.create.href,
+  // authLinks.create.href,
   authLinks.register.href,
   authLinks.twoFactorAuth.href,
 ];

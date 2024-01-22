@@ -15,9 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LoginSchema } from "@/schemas/auth";
 import { authLinks } from "@/config/site";
 import { login } from "@/actions/auth/login";
+import { LoginSchema } from "@/schemas/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/auth/form-error";
@@ -49,7 +49,7 @@ export const LoginForm = () => {
     setSucces("");
 
     startTransition(async () => {
-      login(values)
+      await login(values)
         .then((data: any | undefined) => {
           if (data?.error) {
             // form.reset();
