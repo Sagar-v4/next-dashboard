@@ -79,7 +79,7 @@ export function ForgotPasswordForm() {
                   <div className="space-y-1 leading-none">
                     <FormLabel>Email</FormLabel>
                     <FormDescription>
-                      Get forgot password link on your email
+                      Get forgot password link on your registered email
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -100,7 +100,7 @@ export function ForgotPasswordForm() {
                   <div className="space-y-1 leading-none">
                     <FormLabel>SMS</FormLabel>
                     <FormDescription>
-                      Get forgot password link on your sms
+                      Get forgot password link on your registered mobile number
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -121,7 +121,8 @@ export function ForgotPasswordForm() {
                   <div className="space-y-1 leading-none">
                     <FormLabel>Whatsapp</FormLabel>
                     <FormDescription>
-                      Get forgot password link on your whatsapp
+                      Get forgot password link on your registered whatsapp
+                      number
                     </FormDescription>
                   </div>
                 </FormItem>

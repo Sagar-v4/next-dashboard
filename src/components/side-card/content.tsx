@@ -21,9 +21,9 @@ export const Content = ({ items }: ContentProps) => {
                   href={item.href}
                   key={index}
                   className={cn(
-                    "flex w-full cursor-pointer rounded-sm px-2 py-1.5 hover:bg-secondary",
+                    "flex w-full cursor-pointer rounded-sm px-2 py-1.5 font-medium text-muted-foreground hover:bg-secondary hover:text-foreground",
                     path.includes(item.href) &&
-                      "bg-secondary text-secondary-foreground"
+                      "text-primary-background bg-secondary"
                   )}
                 >
                   {item.title}

@@ -18,8 +18,8 @@ import { Switch } from "@/components/ui/switch";
 import { TwoFactorToggleSchema } from "@/schemas/auth";
 import { FormError } from "@/components/auth/form-error";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { twoFactorToggle } from "@/actions/auth/2fa-toggle";
 import { FormSuccess } from "@/components/auth/form-success";
-import { get2FA, twoFactorToggle } from "@/actions/auth/2fa-toggle";
 
 export function TwoFactorToggleSwitch() {
   const user = useCurrentUser();
