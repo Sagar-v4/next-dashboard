@@ -16,7 +16,7 @@ const userSchema = new Schema({
   emailVerified: { type: Date },
   phone: { type: String },
   isPhoneVerified: { type: Date },
-  twoFactorAuthentication: { type: Date, default: Date.now },
+  twoFactorAuthentication: { type: Date },
   password: { type: String },
   roles: [
     {

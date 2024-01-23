@@ -89,6 +89,25 @@ export const themesLink: keyValue = {
   description: "Theme page",
 };
 
+// Profile > Security
+export const securityChangePasswordLink: keyValue = {
+  title: "Change Password",
+  href: "/profile/security/change",
+  description: "Change password page",
+};
+
+export const securityForgotPasswordLink: keyValue = {
+  title: "Forgot Password",
+  href: "/profile/security/forgot",
+  description: "Forgot password page",
+};
+
+export const securityTwoFactorAuthLink: keyValue = {
+  title: "2FA",
+  href: "/profile/security/2fa",
+  description: "Two factor authentication page",
+};
+
 export const authLinks: objectKeyValue = {
   login: loginLink,
   register: registerLink,
@@ -111,4 +130,10 @@ export const userDropDownLinks: objectKeyValue = {
 
 export const uiSettings: objectKeyValue = {
   themes: themesLink,
+};
+
+export const profileSecurity: objectKeyValue = {
+  change: securityChangePasswordLink,
+  forgot: securityForgotPasswordLink,
+  "2fa": securityTwoFactorAuthLink,
 };

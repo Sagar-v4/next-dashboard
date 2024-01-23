@@ -54,3 +54,33 @@ export const TwoFactorAuthSchema = z
     message: "It should be numbers only",
     path: ["code"],
   });
+
+export const TwoFactorToggleSchema = z.object({
+  id: z.string(),
+  toggle: z.boolean(),
+});
+
+export const ChangePasswordSchema = z
+  .object({
+    id: z.string(),
+    currentPassword: z.string().min(6, {
+      message: "Password should be at least 6 characters",
+    }),
+    newPassword: z.string().min(6, {
+      message: "Password should be at least 6 characters",
+    }),
+    confirmPassword: z.string().min(6, {
+      message: "Password should be at least 6 characters",
+    }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export const ForgotPasswordSchema = z.object({
+  id: z.string(),
+  email: z.boolean(),
+  sms: z.boolean().optional(),
+  whatsapp: z.boolean().optional(),
+});
