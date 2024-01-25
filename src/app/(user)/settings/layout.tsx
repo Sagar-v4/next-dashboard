@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { SideCard } from "@/components/side-card/side-card";
 
 const logo = (): JSX.Element => {
-  return <Settings />;
+  return <Settings className="w-5" />;
 };
 
 export default function SettingsLayout({

@@ -68,8 +68,8 @@ export const LoginForm = () => {
             setShow2FA(true);
           }
         })
-        .catch((e) => {
-          setError("dsddfdsSomething went wrong!!!");
+        .catch((error) => {
+          setError(error.message);
         });
     });
   };

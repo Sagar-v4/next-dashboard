@@ -1,11 +1,15 @@
-import { LockKeyhole } from "lucide-react";
+import { LockKeyhole, Users } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
-import { profileSecurity } from "@/config/site";
 import { SideCard } from "@/components/side-card/side-card";
+import { profileAcccount, profileSecurity } from "@/config/site";
 
-const logo = (): JSX.Element => {
-  return <LockKeyhole />;
+const accountsLogo = (): JSX.Element => {
+  return <Users className="w-5" />;
+};
+
+const securityLogo = (): JSX.Element => {
+  return <LockKeyhole className="w-5" />;
 };
 
 export default function SettingsLayout({
@@ -16,9 +20,14 @@ export default function SettingsLayout({
   return (
     <main>
       <section className="container flex w-screen gap-2 border-2 border-red-500">
-        <div className="my-2 w-[25%] space-y-4 p-1 pb-1">
+        <div className="my-2 h-[calc(100vh-89px)] w-[25%] space-y-4 overflow-auto p-1">
           <SideCard
-            logo={logo()}
+            logo={accountsLogo()}
+            headerLabel="Accounts"
+            list={profileAcccount}
+          />
+          <SideCard
+            logo={securityLogo()}
             headerLabel="Security"
             list={profileSecurity}
           />

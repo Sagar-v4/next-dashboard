@@ -108,6 +108,13 @@ export const securityTwoFactorAuthLink: keyValue = {
   description: "Two factor authentication page",
 };
 
+// Profile > Accounts
+export const accountsDematAccountLink: keyValue = {
+  title: "Demat Accounts",
+  href: "/profile/accounts/demat",
+  description: "Demat Accounts page",
+};
+
 export const authLinks: objectKeyValue = {
   login: loginLink,
   register: registerLink,
@@ -136,4 +143,8 @@ export const profileSecurity: objectKeyValue = {
   change: securityChangePasswordLink,
   forgot: securityForgotPasswordLink,
   "2fa": securityTwoFactorAuthLink,
+};
+
+export const profileAcccount: objectKeyValue = {
+  demate: accountsDematAccountLink,
 };
