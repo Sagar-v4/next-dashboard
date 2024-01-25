@@ -2,7 +2,7 @@
 
 import { logout } from "@/actions/auth/logout";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 const SessionLogout = () => {
   const user = useCurrentUser();
