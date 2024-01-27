@@ -2,7 +2,7 @@ import tracer from "tracer";
 import colors from "colors";
 
 import { logger } from "@/config/env";
-import { saveLogInLocal } from "@/logger/local";
+import { setLogInLocal } from "@/logger/local";
 import { saveLogInDatabase } from "@/logger/database";
 
 const printLogOnConsole = (data: tracer.Tracer.LogOutput) => {
@@ -30,5 +30,5 @@ export const Logger = tracer.colorConsole({
       fatal: [colors.red, colors.bold],
     },
   ],
-  transport: [printLogOnConsole, saveLogInLocal, saveLogInDatabase],
+  transport: [printLogOnConsole, setLogInLocal, saveLogInDatabase],
 });
