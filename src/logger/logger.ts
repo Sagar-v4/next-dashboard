@@ -1,29 +1,12 @@
-import fs from "fs";
 import tracer from "tracer";
 import colors from "colors";
 
 import { logger } from "@/config/env";
+import { saveLogInLocal } from "@/logger/local";
+import { saveLogInDatabase } from "@/logger/database";
 
 const printLogOnConsole = (data: tracer.Tracer.LogOutput) => {
   console.log(data.output);
-};
-
-const saveLogInLocal = (data: tracer.Tracer.LogOutput) => {
-  if (logger.LOCAL_LOG !== "true") return;
-
-  fs.createWriteStream(logger.LOG_FILE_NAME, {
-    flags: "a",
-    encoding: "utf8",
-    mode: 0o666,
-  }).write(
-    `${data.timestamp},${data.title},${data.file},${data.method},${data.line},"${data.message}"\n`
-  );
-};
-
-// TODO: add logs in db
-const saveLogInDatabase = (data: tracer.Tracer.LogOutput) => {
-  if (logger.DATABASE_LOG !== "true") return;
-  console.log("🚀 ~ saveLogInDatabase ~ data:", data);
 };
 
 const preProcessingData = (data: tracer.Tracer.LogOutput): void => {
