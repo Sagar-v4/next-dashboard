@@ -115,6 +115,13 @@ export const accountsDematAccountLink: keyValue = {
   description: "Demat Accounts page",
 };
 
+// Logs
+export const logsLink: keyValue = {
+  title: "Logs",
+  href: "/logs",
+  description: "Logs page",
+};
+
 export const authLinks: objectKeyValue = {
   login: loginLink,
   register: registerLink,

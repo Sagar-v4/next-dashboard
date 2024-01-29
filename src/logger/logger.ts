@@ -17,7 +17,7 @@ export const Logger = tracer.colorConsole({
   level: logger.LOG_LEVEL,
   format:
     "[{{timestamp}}] {{title}}\n{{file}} | {{method}} | {{line}}\n{{message}}",
-  dateformat: "yyyy-mm-dd hh:MM:ss",
+  dateformat: "yyyy-mm-dd hh:MM:ss.l", // Z for GMT like time zone
   preprocess: preProcessingData,
   methods: ["log", "trace", "debug", "info", "warn", "error", "fatal"],
   filters: [
@@ -30,5 +30,6 @@ export const Logger = tracer.colorConsole({
       fatal: [colors.red, colors.bold],
     },
   ],
+  // transport: [printLogOnConsole, saveLogInDatabase],
   transport: [printLogOnConsole, setLogInLocal, saveLogInDatabase],
 });
