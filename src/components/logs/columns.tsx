@@ -1,30 +1,27 @@
 "use client";
 
 import {
-  ActivitySquare,
-  AlertTriangle,
   Ban,
   Bug,
-  DotSquare,
-  Flame,
-  HelpCircle,
   Info,
+  Flame,
+  DotSquare,
+  HelpCircle,
+  AlertTriangle,
+  ActivitySquare,
 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { useSearchParams } from "next/navigation";
 
 import { LogLevels } from "@/constants/logs";
-import { DataTableRowActions } from "./data-table-row-actions";
-import { DataTableColumnHeader } from "./data-table-column-header";
+import { Log, sources } from "@/components/logs/data";
 import { getLogDateFormat, isInLastTime } from "@/utils/date-time";
+import { DataTableRowActions } from "@/components/logs/data-table-row-actions";
+import { DataTableColumnHeader } from "@/components/logs/data-table-column-header";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Log = {
-  title: string;
-  timestamp: Date;
-  file: string;
-  method: string;
-  line: string;
+const getSource = (): string => {
+  const searchParams = useSearchParams();
+  return searchParams.get("source") as string;
 };
 
 export const columns: ColumnDef<Log>[] = [
@@ -91,10 +88,15 @@ export const columns: ColumnDef<Log>[] = [
       return isInLastTime(timestamp, value);
     },
     cell: ({ row }) => {
-      // TODO: commenting as of now, use with mongodb logs
-      // const timeStamp = getLogDateFormat(new Date(row.getValue("timestamp")));
-      // return <div className="">{timeStamp}</div>;
-      return <div className="">{row.getValue("timestamp")}</div>;
+      let timeStamp: string;
+      if (getSource() === sources[0]) {
+        timeStamp = getLogDateFormat(
+          new Date(row.getValue("timestamp"))
+        ).toString();
+      } else {
+        timeStamp = row.getValue("timestamp");
+      }
+      return <div className="">{timeStamp}</div>;
     },
   },
   {

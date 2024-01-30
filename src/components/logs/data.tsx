@@ -1,14 +1,16 @@
 import {
-  ActivitySquare,
-  AlertTriangle,
   Ban,
   Bug,
-  DotSquare,
-  Flame,
   Info,
+  Flame,
+  DotSquare,
+  AlertTriangle,
+  ActivitySquare,
 } from "lucide-react";
 
 import { LogLevels } from "@/constants/logs";
+import { getLogFromLocal } from "@/logger/local";
+import { getLogFromDatabase } from "@/logger/database";
 
 export const labels = [
   {
@@ -24,6 +26,16 @@ export const labels = [
     label: "Documentation",
   },
 ];
+
+export type Log = {
+  title: string;
+  timestamp: Date;
+  file: string;
+  method: string;
+  line: string;
+};
+
+export const sources = ["database", "local"];
 
 export const Severities = [
   {
@@ -133,3 +145,16 @@ export const Timestamps = [
     label: "Last 30 days",
   },
 ];
+
+export async function getData(searchSource: string): Promise<Log[]> {
+  let data: Log[] | undefined | any;
+
+  if (searchSource === sources[0]) {
+    data = await getLogFromDatabase();
+  } else {
+    data = await getLogFromLocal();
+  }
+
+  if (!data) return [];
+  return data;
+}

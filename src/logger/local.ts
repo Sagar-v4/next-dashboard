@@ -1,10 +1,11 @@
+"use server";
+
 import fse from "fs-extra";
 import tracer from "tracer";
 import csv from "csv-parser";
 
 import { logger } from "@/config/env";
 import { Logger } from "@/logger/logger";
-import { Log } from "@/components/logs/columns";
 
 const addHeading = (data: tracer.Tracer.LogOutput) => {
   const headings: string = `timestamp,title,file,method,line,message\n${data.timestamp},${data.title},${data.file},${data.method},${data.line},"${data.message}"\n`;
@@ -21,7 +22,7 @@ const addHeading = (data: tracer.Tracer.LogOutput) => {
   });
 };
 
-export function setLogInLocal(data: tracer.Tracer.LogOutput) {
+export async function setLogInLocal(data: tracer.Tracer.LogOutput) {
   if (logger.LOCAL_LOG !== "true") return;
 
   if (!fse.existsSync(logger.LOG_FILE_NAME)) {
@@ -52,7 +53,7 @@ export function setLogInLocal(data: tracer.Tracer.LogOutput) {
   });
 }
 
-export function getLogFromLocal(): Promise<Log[]> | undefined {
+export async function getLogFromLocal() {
   if (logger.LOCAL_LOG !== "true") return undefined;
 
   const result: any[] = [];

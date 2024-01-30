@@ -15,7 +15,7 @@ export const getLogDateFormat = (timeStamp: Date): String => {
   const hour = addPrefixZeros(timeStamp.getHours(), 2);
   const minute = addPrefixZeros(timeStamp.getMinutes(), 2);
   const second = addPrefixZeros(timeStamp.getSeconds(), 2);
-  const milliseconds = timeStamp.getMilliseconds();
+  const milliseconds = addPrefixZeros(timeStamp.getMilliseconds(), 3);
 
   const time = `${year}-${month}-${date} ${hour}:${minute}:${second}.${milliseconds}`;
 

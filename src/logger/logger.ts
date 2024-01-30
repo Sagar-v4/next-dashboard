@@ -3,7 +3,7 @@ import colors from "colors";
 
 import { logger } from "@/config/env";
 import { setLogInLocal } from "@/logger/local";
-import { saveLogInDatabase } from "@/logger/database";
+import { setLogInDatabase } from "@/logger/database";
 
 const printLogOnConsole = (data: tracer.Tracer.LogOutput) => {
   console.log(data.output);
@@ -30,6 +30,5 @@ export const Logger = tracer.colorConsole({
       fatal: [colors.red, colors.bold],
     },
   ],
-  // transport: [printLogOnConsole, saveLogInDatabase],
-  transport: [printLogOnConsole, setLogInLocal, saveLogInDatabase],
+  transport: [printLogOnConsole, setLogInLocal, setLogInDatabase],
 });

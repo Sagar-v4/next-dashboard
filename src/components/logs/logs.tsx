@@ -1,20 +1,28 @@
-import { getLogFromLocal } from "@/logger/local";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+import { columns } from "@/components/logs/columns";
+import { Log, getData } from "@/components/logs/data";
 import { DataTable } from "@/components/logs/data-table";
-import { Log, columns } from "@/components/logs/columns";
 
-async function getData(): Promise<Log[]> {
-  const data: Log[] | undefined = await getLogFromLocal();
+export default function LogsDataTablef() {
+  const [data, setData] = useState<Log[] | any>();
 
-  if (!data) return [];
-  return data;
-}
+  const searchParams = useSearchParams();
+  const searchSource = searchParams.get("source");
 
-export default async function LogsDataTablef() {
-  const data = await getData();
+  useEffect(() => {
+    (async () => {
+      const logs = await getData(searchSource as string);
+      setData(logs);
+    })();
+  }, [searchSource]);
 
   return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+    <div className="container py-4">
+      {data ? <DataTable columns={columns} data={data} /> : "Loading..."}
     </div>
   );
 }
