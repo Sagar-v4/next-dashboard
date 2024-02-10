@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { Document, model, models, Schema, Types } from "mongoose";
 
-import { userRoles } from "@/constants/auth";
+import { UserRoles } from "@/constants/auth";
 import { Brokers, TradeTypes } from "@/constants/account";
 
 const brokerSchema = new Schema(
@@ -30,8 +30,8 @@ const userSchema = new Schema(
     roles: [
       {
         type: String,
-        enum: Object.values(userRoles),
-        default: userRoles.USER,
+        enum: Object.values(UserRoles),
+        default: UserRoles.USER,
       },
     ],
     brokers: [brokerSchema],
@@ -70,7 +70,7 @@ userSchema.methods.toPublicJSON = function () {
 
 userSchema.pre("save", function (next) {
   if (!this.roles.length) {
-    this.roles.push(userRoles.USER);
+    this.roles.push(UserRoles.USER);
   }
   next();
 });

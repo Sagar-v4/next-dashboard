@@ -88,15 +88,7 @@ export const columns: ColumnDef<Log>[] = [
       return isInLastTime(timestamp, value);
     },
     cell: ({ row }) => {
-      let timeStamp: string;
-      if (getSource() === sources[0]) {
-        timeStamp = getLogDateFormat(
-          new Date(row.getValue("timestamp"))
-        ).toString();
-      } else {
-        timeStamp = row.getValue("timestamp");
-      }
-      return <div className="">{timeStamp}</div>;
+      return <div className="">{row.getValue("timestamp")}</div>;
     },
   },
   {

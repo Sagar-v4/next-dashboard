@@ -120,6 +120,7 @@ export const logsLink: keyValue = {
   title: "Logs",
   href: "/logs",
   description: "Logs page",
+  target: "_blank",
 };
 
 export const authLinks: objectKeyValue = {
@@ -140,6 +141,7 @@ export const mainNavLinks: objectKeyValue = {
 export const userDropDownLinks: objectKeyValue = {
   profile: profileLink,
   settings: settingLink,
+  logs: logsLink,
 };
 
 export const uiSettings: objectKeyValue = {

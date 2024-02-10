@@ -1,7 +1,10 @@
+"use server";
+
 import tracer from "tracer";
 
 import { logger } from "@/config/env";
 import Logs, { ILogsBase } from "@/lib/model/logs";
+import { getLogDateFormat } from "@/utils/date-time";
 
 export const setLogInDatabase = async (
   data: tracer.Tracer.LogOutput
@@ -21,11 +24,14 @@ export const setLogInDatabase = async (
   }
 };
 
-// TODO: fix it
+// TODO: {Warning: Only plain objects can be passed to Client Components from Server Components.}
 export async function getLogFromDatabase(): Promise<any[] | undefined> {
   if (logger.DATABASE_LOG !== "true") return undefined;
-  const logs = await Logs.find();
-  const Loggers = logs.map((log) => log._doc);
+  const logs = await Logs.find({ _id: { $exists: true } });
+  const Loggers = logs.map((log) => {
+    log._doc.timestamp = getLogDateFormat(new Date(log._doc.timestamp));
+    return log._doc;
+  });
 
   if (!Loggers) {
     throw Error("Could not get logs!");
