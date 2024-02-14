@@ -14,9 +14,9 @@ interface RightNavProps {
 export function RightNav({ items }: RightNavProps) {
   const path = usePathname();
   return (
-    <div className="flex gap-6 md:gap-10">
+    <>
       {items?.length ? (
-        <nav className="flex gap-6">
+        <nav className="flex">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -24,9 +24,10 @@ export function RightNav({ items }: RightNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground hover:text-foreground",
+                    "flex items-center px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:underline",
                     item.disabled && "cursor-not-allowed opacity-80",
-                    path === item.href && "text-primary-background"
+                    path === item.href &&
+                      "text-primary-background rounded-sm bg-secondary"
                   )}
                 >
                   {item.title}
@@ -35,6 +36,6 @@ export function RightNav({ items }: RightNavProps) {
           )}
         </nav>
       ) : null}
-    </div>
+    </>
   );
 }
