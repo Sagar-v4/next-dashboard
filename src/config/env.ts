@@ -22,3 +22,10 @@ export const google: keyValue = {
   GOOGLE_CLIENT_ID: String(process.env.GOOGLE_CLIENT_ID),
   GOOGLE_CLIENT_SECRET: String(process.env.GOOGLE_CLIENT_SECRET),
 };
+
+export const logger: keyValue = {
+  LOG_LEVEL: String(process.env.LOG_LEVEL),
+  LOCAL_LOG: String(process.env.LOCAL_LOG),
+  DATABASE_LOG: String(process.env.DATABASE_LOG),
+  LOG_FILE_NAME: String(process.env.LOG_FILE_NAME),
+};

@@ -1,7 +1,9 @@
 "use server";
 
 import nodemailer from "nodemailer";
+
 import { smtpMail } from "@/config/env";
+import { Logger } from "@/logger/logger";
 // import * as handlebars from "handlebars";
 // import { welcomeTemplate } from "./templates/welcome";
 
@@ -37,6 +39,11 @@ export const sendSMTPMail = async ({ to, subject, body, name }: Mail) => {
     });
     return sendResult.response.includes("2.0.0 OK") as boolean;
   } catch (error) {
+    Logger.fatal({
+      message: "sendSMTPMail catch!",
+      error: (error as Error).message,
+    });
+
     return false;
   }
 };
