@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "jq '.recommendations | map(\"code --install-extension \\(.)\") | .[]' .vscode/extensions.json | xargs -I {} sh -c {}",
       "runOptions": {
-        "runOn": "folderOpen"
+        // "runOn": "folderOpen"
       }
     }
   ]
