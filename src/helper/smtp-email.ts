@@ -1,3 +1,4 @@
+import { Logger } from "@/logger/logger";
 import { sendSMTPMail } from "@/lib/relay/email/smtp-email";
 
 export const sendRegistrationEmail = async (
@@ -12,6 +13,11 @@ export const sendRegistrationEmail = async (
     });
     return true;
   } catch (error) {
+    Logger.fatal({
+      message: "sendRegistrationEmail catch!",
+      error: (error as Error).message,
+    });
+
     return false;
   }
 };
@@ -28,6 +34,11 @@ export const sendResetEmail = async (
     });
     return true;
   } catch (error) {
+    Logger.fatal({
+      message: "sendResetEmail catch!",
+      error: (error as Error).message,
+    });
+
     return false;
   }
 };
@@ -44,6 +55,11 @@ export const send2FAEmail = async (
     });
     return true;
   } catch (error) {
+    Logger.fatal({
+      message: "send2FAEmail catch!",
+      error: (error as Error).message,
+    });
+
     return false;
   }
 };

@@ -6,7 +6,7 @@ import { setLogInLocal } from "@/logger/local";
 import { setLogInDatabase } from "@/logger/database";
 
 const printLogOnConsole = (data: tracer.Tracer.LogOutput) => {
-  console.log(data.output);
+  console.log(`${data.output}\n------`);
 };
 
 const preProcessingData = (data: tracer.Tracer.LogOutput): void => {

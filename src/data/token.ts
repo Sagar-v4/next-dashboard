@@ -1,4 +1,6 @@
 import { DeleteResult, ObjectId } from "mongodb";
+
+import { Logger } from "@/logger/logger";
 import { TokenTypes } from "@/constants/auth";
 import { emailWithoutTagRegex } from "@/utils/regex";
 import Token, { ITokenBase } from "@/lib/model/token";
@@ -16,6 +18,12 @@ export const getTokenByEmail = async (
 
     return savedToken;
   } catch (error) {
+    Logger.fatal({
+      message: "getTokenByEmail catch!",
+      error: (error as Error).message,
+      type: type,
+    });
+
     return null;
   }
 };
@@ -30,6 +38,12 @@ export const getTokenByToken = async (
 
     return savedToken;
   } catch (error) {
+    Logger.fatal({
+      message: "getTokenByToken catch!",
+      error: (error as Error).message,
+      token: token,
+    });
+
     return null;
   }
 };
@@ -43,6 +57,12 @@ export const deletTokenById = async (
 
     return deletedToken;
   } catch (error) {
+    Logger.fatal({
+      message: "deletTokenById catch!",
+      error: (error as Error).message,
+      tokenId: tokenId,
+    });
+
     return null;
   }
 };
@@ -57,6 +77,12 @@ export const deleteTokenByToken = async (
 
     return deletedToken;
   } catch (error) {
+    Logger.fatal({
+      message: "deleteTokenByToken catch!",
+      error: (error as Error).message,
+      token: token,
+    });
+
     return null;
   }
 };

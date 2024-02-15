@@ -1,3 +1,4 @@
+// import { Logger } from "@/logger/logger";
 import User, { IUserBase } from "@/lib/model/user";
 import { emailWithoutTagRegex } from "@/utils/regex";
 
@@ -12,6 +13,11 @@ export const getUserByEmail = async (
 
     return user;
   } catch (error) {
+    // Logger.fatal({
+    //   message: "getUserByEmail catch!",
+    //   error: (error as Error).message,
+    // });
+
     return null;
   }
 };
@@ -24,6 +30,12 @@ export const getUserById = async (
 
     return user;
   } catch (error) {
+    // Logger.fatal({
+    //   message: "getUserById catch!",
+    //   error: (error as Error).message,
+    //   userId: userId,
+    // });
+
     return null;
   }
 };

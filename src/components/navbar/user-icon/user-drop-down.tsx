@@ -63,9 +63,7 @@ export function DropdownProfileMenu() {
               <Link key={index} target={link.target} href={link.href}>
                 <DropdownMenuItem className="cursor-pointer">
                   {link.title}
-                  {link.target && (
-                    <ArrowUpRight className="ml-0.5 w-3 text-sky-500" />
-                  )}
+                  {link.target && <ArrowUpRight className="ml-0.5 w-3" />}
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </Link>
